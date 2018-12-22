@@ -1,12 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { createStore } from 'redux'
+import KeyApp from './components/KeyApp';
+import KeyMap from './reducers/KeyMap';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+let store = createStore(KeyMap)
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+const render = ()=>{
+  ReactDOM.render(
+    <KeyApp keyMap={store.getState()} store={store}/>,
+     document.getElementById('root')
+    )
+}
+
+store.subscribe(render)
+render()
