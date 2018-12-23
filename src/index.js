@@ -2,14 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { createStore } from 'redux'
+import {combineReducers} from 'redux'
 import KeyApp from './components/KeyApp';
-import KeyMap from './reducers/KeyMap';
+import keyMap from './reducers/keyMap';
+import simpleDrumNotationBuilder from './reducers/simpleDrumNotationBuilder';
 
-let store = createStore(KeyMap)
+const drumApp = combineReducers({
+  keyMap,
+  simpleDrumNotationBuilder
+})
+let store = createStore(drumApp)
 
 const render = ()=>{
+  
   ReactDOM.render(
-    <KeyApp keyMap={store.getState()} store={store}/>,
+    <KeyApp 
+      store={store}
+      {...store.getState() }
+    />,
      document.getElementById('root')
     )
 }
