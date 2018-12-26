@@ -10,7 +10,6 @@ export const points = [...Array(dy).keys()].slice(1).map(i=>
         }
         }))
 
-
 export const center = points[(dx/2)-1][(dy/2)-1]
 
 export const up = glue(points[0])
@@ -29,19 +28,19 @@ export const right = glue(points.map(row=>row[dx-2]))
             c:`${p.p0.x+2*l/dx} ${p.p0.y+l/dy/2}`}
         })
 
-export const left = glue(points.map(row=>row[0]).reverse())
+export const left = glue(points.map(row=>row[0]))
     .map(p=>{
         return {
             p0:p.p0,
             p1:p.p1,
-            c:`${p.p1.x-2*l/dx} ${p.p1.y+l/dy/2}`}
+            c:`${p.p0.x-2*l/dx} ${p.p0.y+l/dy/2}`}
         })
-export const down = glue(points[dy-2].reverse())
+export const down = glue([...points[dy-2],points[dy-3][dx-2]])
     .map(p=>{
         return {
             p0:p.p0,
             p1:p.p1,
-            c:`${p.p1.x+l/dx/2} ${p.p1.y+2*l/dy}`}
+            c:`${p.p0.x+l/dx/2} ${p.p0.y+2*l/dy}`}
         })
 
 export const centralLines =    [...up,

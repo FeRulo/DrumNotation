@@ -1,4 +1,4 @@
-function tempoBin(key) {
+const tempoBin =(key)=>{
   switch (key) {
     case "a":return Math.pow(2,0)
     case "s":return Math.pow(2,3)
@@ -12,10 +12,12 @@ function tempoBin(key) {
     case "x":return Math.pow(2,5)
     case "c":return Math.pow(2,8)
     case "v":return Math.pow(2,11)
+    case "g":return Math.pow(2,12)
     default:
       return 0
   }
 }
+
 const notate = (state = [{
   snare1: 0,
   snare2: 0,

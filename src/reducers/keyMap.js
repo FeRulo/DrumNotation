@@ -1,7 +1,7 @@
 const keyMap = (state = [], action={type:'NONE'}) =>{
   switch (action.type) {
     case 'KEYDOWN':
-      if( !state.map(s=>s.key).includes(action.key)){
+      if( !state.map(s=>s.key).includes(action.key) && ![18,16,9].includes(action.keyCode)){
         return [...state,{
           key: action.key,
           keyCode: action.keyCode

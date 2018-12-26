@@ -56,7 +56,7 @@ const Letter = ({
         <rect height={l} width={l} fill="transparent" stroke="black"/>
         {selectOnlyShowables(tempo.snare1,orderLineTypes(up))}
         {selectOnlyShowables(tempo.snare2,orderLineTypes(right))}
-        {selectOnlyShowables(tempo.kick0,orderLineTypes(left))}
+        {selectOnlyShowables(tempo.kick0>>1,orderLineTypes(left).slice(1))}
         {selectOnlyShowables(tempo.kick1,orderLineTypes(down))}
     </svg>
     )
