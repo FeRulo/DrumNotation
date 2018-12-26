@@ -54,7 +54,10 @@ const Letter = ({
     return(
     <svg height={l} width={l}>
         <rect height={l} width={l} fill="transparent" stroke="black"/>
-        {selectOnlyShowables(tempo,orderLineTypes(up))}
+        {selectOnlyShowables(tempo.snare1,orderLineTypes(up))}
+        {selectOnlyShowables(tempo.snare2,orderLineTypes(right))}
+        {selectOnlyShowables(tempo.kick0,orderLineTypes(left))}
+        {selectOnlyShowables(tempo.kick1,orderLineTypes(down))}
     </svg>
     )
 }

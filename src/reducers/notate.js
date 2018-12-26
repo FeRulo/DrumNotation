@@ -16,11 +16,28 @@ function tempoBin(key) {
       return 0
   }
 }
-const notate = (state = [0,0], action={type:'NONE'}) =>{
-  console.log(action)
+const notate = (state = [{
+  snare1: 0,
+  snare2: 0,
+  kick0: 0,
+  kick1: 0
+}], action={type:'NONE'}) =>{
   switch (action.type) {
     case 'KEYDOWN': 
-        return [state[0] ^ tempoBin(action.key), ...state.slice(1) ]
+      switch (action.keyMap.map(k=>k.key).toString()){
+        case 'i' : return [
+            {...state[0],snare1:state[0].snare1 ^ tempoBin(action.key)}, 
+            ...state.slice(1)]
+        case 'j' : return [
+            {...state[0],kick0:state[0].kick0 ^ tempoBin(action.key)}, 
+            ...state.slice(1)]
+        case 'k' : return [
+            {...state[0],kick1:state[0].kick1 ^ tempoBin(action.key)}, 
+            ...state.slice(1)]
+        case 'l' : return [
+            {...state[0],snare2:state[0].snare2 ^ tempoBin(action.key)}, 
+            ...state.slice(1)]
+      }
     default:
       return state
   }
