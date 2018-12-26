@@ -27,7 +27,7 @@ class KeyInput extends Component{
     render(){
         let builder = this.props.simpleDrumNotationBuilder
         let notation = builder.notation
-            .map((tempo,key)=><Letter tempo={tempo}key={key}/>).reverse()
+            .map((tempo,key)=><Letter notation={tempo} key={key}/>).reverse()
         let i = notation.length - 1 - builder.index
         return(            
             <div className="input" tabIndex="0">
