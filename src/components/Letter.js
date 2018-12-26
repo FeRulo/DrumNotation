@@ -1,41 +1,17 @@
-import React from 'react';
-const l = 90
-const dx= 6, dy = 6
+import React from 'react'
+import {l,center,up,right,left,down} from '../vos/constantValues'
 
-const points = [...Array(dy).keys()].slice(1).map(i=> 
-    [...Array(dy).keys()].slice(1).map(j=>{
-        return {
-            x: l*j/dx,
-            y: l*i/dy,
-            s: `${l*j/dx} ${l*i/dy}`
-        }
-        }))
-
-const center = points[(dx/2)-1][(dy/2)-1]
-
-const upperPerimeter = 
-    [...points[0].map(p=>{return {...p,c:`${p.x+l/dx/2} ${p.y-2*l/dy}`}}),
-    ...points.slice(1).map(row=>row[dx-2]).map(p=>{return {...p,c:`${p.x+2*l/dy} ${p.y+l/dx/2}`}})]
-
-const lowerPerimeter = 
-    [...points.map(row=>row[0]).map(p=>{return {...p,c:`${p.x-2*l/dy} ${p.y-l/dx/2}`}}),
-    ...points[dy-2].map(p=>{return {...p,c:`${p.x+l/dx/2} ${p.y-2*l/dy}`}})]
-
-const lines =  [...upperPerimeter,...lowerPerimeter]
-    .map(point=>{
-        return {
-            p0:center,
-            p1:point
-        }
-    })
-
-const glue=(rest)=>{
-    if(rest.length>1){
-        let point = rest[0]
-        return [{
-            p0:point,
-            p1:rest[1]},...glue(rest.slice(1))]
-        }
+const orderLineTypes=(side)=>{
+    if(side.length>0){
+        let head = side[0]
+        return ( 
+            [...[
+            <Line p0={center} p1={head.p0} key={`central:${head.p0.s}`}/>,
+            <Curve {...head} key={`curve:${head.p0.s}`}/>,
+            <Line {...head} key={`shallow:${head.p0.s}`}/>
+            ],...orderLineTypes(side.slice(1))]
+        )
+    }
     else 
         return []
 }
@@ -43,46 +19,42 @@ const glue=(rest)=>{
 const Curve = ({
     p0,
     p1,
+    c
 })=>{
     return(
         <path
-            d= {`M${p0.s} C${p0.s} ${p0.c} ${p1.s}`}
-            stroke="black" fill="none"/>
+            d= {`M${p0.s} C${p0.s} ${c} ${p1.s}`}
+            stroke="black" fill="none" strokeWidth={l/35}/>
     )
 }
 
 const Line = ({
     p0,
-    p1
+    p1,
 })=>{
     return(
-        <path
+        <path 
             d= {`M${p0.s} L${p0.s} ${p1.s} z`}
-            stroke="black" fill="none"/>
+            stroke="black" fill="none" strokeWidth={l/35}/>
     )
 }
-
+const selectOnlyShowables=(tempo,lines)=>{
+    if(lines.length>0){
+        if (tempo%2!==0){
+            return [lines[0],...selectOnlyShowables(tempo>>1,lines.slice(1))]
+        }
+        else return selectOnlyShowables(tempo>>1,lines.slice(1))
+    }
+    else 
+        return []
+}
 const Letter = ({
-    simpleDrumNotationBuilder
-})=>{
+    tempo
+})=>{ 
     return(
     <svg height={l} width={l}>
         <rect height={l} width={l} fill="transparent" stroke="black"/>
-        {lines.map(l=>{
-            return <Line {...l}/>
-        })}
-        {glue(upperPerimeter).map(l=>{
-            return <Line {...l}/>
-        })}
-        {glue(lowerPerimeter).map(l=>{
-            return <Line {...l}/>
-        })}
-        {glue(upperPerimeter).map(c=>{
-            return <Curve {...c}/>
-        })}
-        {glue(lowerPerimeter).map(c=>{
-            return <Curve {...c}/>
-        })}
+        {selectOnlyShowables(tempo,orderLineTypes(up))}
     </svg>
     )
 }

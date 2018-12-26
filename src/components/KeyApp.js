@@ -2,7 +2,6 @@ import React from 'react';
 import './KeyApp.css';
 import KeyInput from './KeyInput';
 import KeyShower from './KeyShower';
-import Letter from './Letter';
 
 const KeyApp =({
   keyMap,
@@ -11,9 +10,9 @@ const KeyApp =({
     return (
       <div>
         <KeyInput  store={store} 
-          simpleDrumNotationBuilder={simpleDrumNotationBuilder}/>
-        <KeyShower keyMap={keyMap}/>
-        <Letter {...simpleDrumNotationBuilder}/>
+          simpleDrumNotationBuilder={simpleDrumNotationBuilder}
+          keyMap={keyMap}/>
+          <KeyShower keyMap={keyMap}/>
       </div>
     );
 }

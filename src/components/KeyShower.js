@@ -4,7 +4,7 @@ const KeyShower =
   ({keyMap}) =>{
   return(
     <h1>{
-      keyMap.map(k=><span>{k.key.toUpperCase()}({k.keyCode})+</span>)
+      keyMap.map((k,key)=><span key={key}>{k.key.toUpperCase()}({k.keyCode})+</span>)
     }</h1>
   )
 }
