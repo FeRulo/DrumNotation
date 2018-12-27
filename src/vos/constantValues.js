@@ -1,4 +1,4 @@
-export const l = 200
+export const l = 90
 const dx= 6, dy = 6
 
 export const points = [...Array(dy).keys()].slice(1).map(i=> 

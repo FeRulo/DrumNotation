@@ -42,6 +42,23 @@ const orderWithSemiQuaver=(side)=>{
     else return []
 }
 
+const selectOnlyShowables=(tempo,lines)=>{
+    if(lines.length>0){
+        if (tempo%2!==0){
+            return [lines[0],...selectOnlyShowables(tempo>>1,lines.slice(1))]
+        }
+        else return selectOnlyShowables(tempo>>1,lines.slice(1))
+    }
+    else 
+        return []
+}
+
+const selectOrder=(tempo, side)=>{
+    //2340 when position 2,5,8,11 is 1 (there are fusas)
+    if((tempo & 2340) !==0) return orderWithFusas(side) 
+    else return orderWithSemiQuaver(side)
+}
+
 const Curve = ({
     p0,
     p1,
@@ -64,30 +81,13 @@ const Line = ({
             stroke="black" fill="none" strokeWidth={l/35}/>
     )
 }
-const selectOnlyShowables=(tempo,lines)=>{
-    if(lines.length>0){
-        if (tempo%2!==0){
-            return [lines[0],...selectOnlyShowables(tempo>>1,lines.slice(1))]
-        }
-        else return selectOnlyShowables(tempo>>1,lines.slice(1))
-    }
-    else 
-        return []
-}
-
-const selectOrder=(tempo, side)=>{
-    //2340 when position 2,5,8,11 is 1 (there are fusas)
-    if((tempo & 2340) !==0) return orderWithFusas(side) 
-    else return orderWithSemiQuaver(side)
-}
 
 const Letter = ({
     notation
 })=>{ 
     return(
-        <div style={{display:'inline-block',border: '1px solid blue'}}>
+        <div style={{display:'inline-block'}}>
             <svg height={l} width={l} >
-                <rect height={l} width={l} fill="transparent" stroke="black"/>
                 {selectOnlyShowables(notation.snare1,selectOrder(notation.snare1,up))}
                 {selectOnlyShowables(notation.snare2,selectOrder(notation.snare2,right))}
                 {selectOnlyShowables(notation.kick0>>1,selectOrder(notation.kick0,left).slice(1))}

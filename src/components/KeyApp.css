@@ -1,6 +1,6 @@
 .input{
-  height: 70vh;
   border: 1px solid #c2c2c2;
+  min-height:200px;
 }
 
 .index{
