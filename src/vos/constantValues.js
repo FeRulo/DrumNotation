@@ -1,4 +1,4 @@
-export const l = 90
+export const l = 200
 const dx= 6, dy = 6
 
 export const points = [...Array(dy).keys()].slice(1).map(i=> 
@@ -42,7 +42,6 @@ export const down = glue([...points[dy-2],points[dy-3][dx-2]])
             p1:p.p1,
             c:`${p.p0.x+l/dx/2} ${p.p0.y+2*l/dy}`}
         })
-console.log(down)
 
 function glue(rest){
     if(rest.length>1){
