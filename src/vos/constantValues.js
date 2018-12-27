@@ -42,18 +42,7 @@ export const down = glue([...points[dy-2],points[dy-3][dx-2]])
             p1:p.p1,
             c:`${p.p0.x+l/dx/2} ${p.p0.y+2*l/dy}`}
         })
-
-export const centralLines =    [...up,
-                        ...right,
-                        ...left,
-                        ...down 
-                        ]
-    .map(point=>{
-        return {
-            p0:center,
-            p1:point.p0
-        }
-    })
+console.log(down)
 
 function glue(rest){
     if(rest.length>1){

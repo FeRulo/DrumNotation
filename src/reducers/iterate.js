@@ -1,8 +1,6 @@
 import notate from './notate'
 
 const iterate = (state = [0], action={type:'NONE'}, index = 0) =>{
-    console.log("iterating with state\t")
-    console.log(state)
     switch (action.type) {
       case 'KEYDOWN': 
         switch(action.keyCode){

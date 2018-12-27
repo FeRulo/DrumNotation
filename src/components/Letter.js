@@ -30,9 +30,17 @@ const orderWithSemiQuaver=(side)=>{
             {}
         ],...orderWithSemiQuaver(side.slice(2))]
         )
+    }else if(side.length>0){
+        let head = side[0]
+        let second = side[1]
+        return ( 
+            [
+            <Line p0={center} p1={head.p0} key={`central:${head.p0.s}`}/>,
+            <Curve {...head} key={`curve:${head.p0.s}`}/>,
+            {}]
+        )
     }
-    else 
-        return []
+    else return []
 }
 
 const Curve = ({
@@ -78,13 +86,19 @@ const Letter = ({
     notation
 })=>{ 
     return(
-    <svg height={l} width={l}>
-        <rect height={l} width={l} fill="transparent" stroke="black"/>
-        {selectOnlyShowables(notation.snare1,selectOrder(notation.snare1,up))}
-        {selectOnlyShowables(notation.snare2,selectOrder(notation.snare2,right))}
-        {selectOnlyShowables(notation.kick0>>1,selectOrder(notation.kick0,left).slice(1))}
-        {selectOnlyShowables(notation.kick1,selectOrder(notation.kick1,down))}
-    </svg>
+        <div>
+            <svg height={l} width={l}>
+                <rect height={l} width={l} fill="transparent" stroke="black"/>
+                {selectOnlyShowables(notation.snare1,selectOrder(notation.snare1,up))}
+                {selectOnlyShowables(notation.snare2,selectOrder(notation.snare2,right))}
+                {selectOnlyShowables(notation.kick0>>1,selectOrder(notation.kick0,left).slice(1))}
+                {selectOnlyShowables(notation.kick1,selectOrder(notation.kick1,down))}
+            </svg>
+            <p>{notation.snare1.toString(2)}</p>
+            <p>{notation.snare2.toString(2)}</p>
+            <p>{notation.kick0.toString(2)}</p>
+            <p>{notation.kick1.toString(2)}</p>
+        </div>
     )
 }
 
