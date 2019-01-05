@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import { createStore } from 'redux'
 import {combineReducers} from 'redux'
-import KeyApp from './components/KeyApp';
+import DrumNotator from './components/DrumNotator';
 import keyMap from './reducers/keyMap';
 import simpleDrumNotationBuilder from './reducers/simpleDrumNotationBuilder';
 
@@ -16,7 +16,7 @@ let store = createStore(drumApp)
 const render = ()=>{
   
   ReactDOM.render(
-    <KeyApp 
+    <DrumNotator 
       store={store}
       {...store.getState() }
     />,

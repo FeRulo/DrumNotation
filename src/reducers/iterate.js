@@ -1,10 +1,17 @@
 import notate from './notate'
+import Snare from './Snare.wav'
+
+function togglePlay(url){
+  return (new Audio(url)).play()
+}
 
 const iterate = (state = [0], action={type:'NONE'}, index = 0) =>{
     switch (action.type) {
       case 'KEYDOWN': 
         switch(action.keyCode){
           case 13: 
+            togglePlay(Snare)
+            return state
           case 32: 
             return [...state.slice(0,index),...notate(),...state.slice(index)]//space
           case 8: //backspace

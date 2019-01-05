@@ -1,14 +1,15 @@
 import React from 'react'
-import Sound from 'react-sound'
 
-const Music =({url})=>{
-    return <Sound
-    url={url}
-    playStatus={Sound.status.PLAYING}
-    playFromPosition={300 /* in milliseconds */}
-    muted={true}
-    />
+function togglePlay(url){
+  return (new Audio(url)).play()
 }
-  
-  
-  export default Music;
+
+const Music = ({url}) => {
+  return (
+    <div>
+        <button onClick={togglePlay(url)}>{'Play'}</button>
+    </div>
+  )
+}
+
+export default Music;
