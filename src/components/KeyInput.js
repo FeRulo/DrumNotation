@@ -1,28 +1,7 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import Letter from './Letter'
 
 class KeyInput extends Component{
-    
-    componentDidMount() {
-        let dom = ReactDOM.findDOMNode(this)
-        dom.addEventListener('keydown', e=>{
-            this.props.store.dispatch({
-                type:'KEYDOWN',
-                key:e.key,
-                keyCode:e.which || e.keyCode,
-                keyMap: this.props.keyMap
-            })
-        })
-        dom.addEventListener('keyup', e=>{
-            this.props.store.dispatch({
-                type:'KEYUP',
-                key: e.key,
-                keyCode: e.which || e.keyCode,
-                keyMap: this.props.keyMap
-            })
-        })
-    }
 
     render(){
         let builder = this.props.simpleDrumNotationBuilder

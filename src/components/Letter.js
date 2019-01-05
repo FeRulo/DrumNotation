@@ -93,10 +93,10 @@ const Letter = ({
                 {selectOnlyShowables(notation.kick0>>1,selectOrder(notation.kick0,left).slice(1))}
                 {selectOnlyShowables(notation.kick1,selectOrder(notation.kick1,down))}
             </svg>
-            <span style={{display:'block'}} width={l}>{notation.snare1.toString(2)}</span>
-            <span style={{display:'block'}} width={l}>{notation.snare2.toString(2)}</span>
-            <span style={{display:'block'}} width={l}>{notation.kick0.toString(2)}</span>
-            <span style={{display:'block'}} width={l}>{notation.kick1.toString(2)}</span>
+            <span style={{display:'block'}} width={l}>{notation.snare1.toString(2).split("").reverse().join("")}</span>
+            <span style={{display:'block'}} width={l}>{notation.snare2.toString(2).split("").reverse().join("")}</span>
+            <span style={{display:'block'}} width={l}>{notation.kick0.toString(2).split("").reverse().join("")}</span>
+            <span style={{display:'block'}} width={l}>{notation.kick1.toString(2).split("").reverse().join("")}</span>
         </div>
     )
 }
