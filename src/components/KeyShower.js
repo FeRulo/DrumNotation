@@ -1,11 +1,13 @@
 import React from 'react';
 
 const KeyShower = 
-  ({keyMap}) =>{
+  ({keyMap,player}) =>{
   return(
-    <h1>{
-      keyMap.map((k,key)=><span key={key}>{k.key.toUpperCase()}({k.keyCode})+</span>)
-    }</h1>
+    <div>
+      <h1>{
+        keyMap.map((k,key)=><span key={key}>{k.key.toUpperCase()}({k.keyCode})+</span>)
+      }</h1>
+    </div>
   )
 }
 
