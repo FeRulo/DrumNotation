@@ -3,7 +3,7 @@ import './DrumNotator.css';
 import Page from './Page';
 import KeyShower from './KeyShower';
 import Title from './Title'
-import DrumPlayer from './DrumPlayer';
+import DrumPlayer from '../../drumPlayer/components/DrumPlayer';
 
 class DrumNotator extends Component{
     componentDidMount() {

@@ -1,12 +1,13 @@
+
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { createStore } from 'redux'
 import {combineReducers} from 'redux'
-import DrumNotator from './components/DrumNotator';
-import keyMap from './reducers/keyMap';
-import simpleDrumNotationBuilder from './reducers/simpleDrumNotationBuilder';
-import player from './reducers/player';
+import DrumNotator from './domain/drumNotator/components/DrumNotator';
+import keyMap from './acl/inputAdapter/reducers/keyMap';
+import simpleDrumNotationBuilder from './domain/drumNotator/reducers/simpleDrumNotationBuilder';
+import player from './domain/drumPlayer/reducers/player';
 
 const drumApp = combineReducers({
   keyMap,
