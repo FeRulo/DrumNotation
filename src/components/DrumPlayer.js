@@ -9,12 +9,26 @@ function hit(url){
     return (new Audio(url)).play()
 }
 
-function play(time=0){
-    return setInterval(()=>hit(audioKick),time)
+function play(bpm,store){
+    hit(audioKick)
+    pause(store)
+    return setTimeout(()=>next(store),60000/bpm)
 }
 
-function start(player){
-    return player.played? play(500):0
+function start(player,store){
+    return player.played && player.continued? play(90,store):0
+}
+
+function next(store){
+    store.dispatch({
+        type:'CONTINUE'
+    })
+}
+
+function pause(store){
+    store.dispatch({
+        type:'PAUSE'
+    })
 }
 
 class DrumPlayer extends Component{
@@ -30,9 +44,8 @@ class DrumPlayer extends Component{
         
     }
     render(){
-        let player = this.props.player
-        start(player)
-        return(<p></p>)
+        start(this.props.player,this.props.store)
+        return(<p>{this.props.player.index}</p>)
     }
 
 }
