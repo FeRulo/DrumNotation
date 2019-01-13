@@ -1,8 +1,6 @@
 import {contains,
-  kick1KeyCombination,
-  snare1KeyCombination,
-  snare2KeyCombination,
-  kick0KeyCombination } from '../vos/keyConstantValues'
+  snareKeyCombination,
+  kickKeyCombination } from '../vos/keyConstantValues'
 
 
 const getBinariesByKeyCombinations =(keyMap=[], combinations)=>{
@@ -16,16 +14,14 @@ const getBinariesByKeyCombinations =(keyMap=[], combinations)=>{
 }
 
 const notate = (state = [{
-  snare1: 0,
-  snare2: 0,
-  kick0: 0,
-  kick1: 0
+  snare: 0,
+  kick: 0
 }], action={type:'NONE',keyMap:[]}) =>{
   let keys = [action.key,...action.keyMap.map(k=>k.key)].filter((k,i,self)=>self.indexOf(k)===i)
   return [
       {...state[0],
-        snare1: state[0].snare1 ^ getBinariesByKeyCombinations(keys,snare1KeyCombination),
-        kick0: state[0].kick0 ^ getBinariesByKeyCombinations(keys,kick0KeyCombination),
+        snare: state[0].snare ^ getBinariesByKeyCombinations(keys,snareKeyCombination),
+        kick: state[0].kick ^ getBinariesByKeyCombinations(keys,kickKeyCombination),
       }, 
       ...state.slice(1)]
 }

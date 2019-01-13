@@ -1,12 +1,16 @@
 import React from 'react'
-import {l,center,up,right,left,down} from '../vos/constantValues'
+import {letterCenter,
+    letterUpperSide,
+    letterRightSide,
+    letterLeftSide,
+    letterDownSide,l} from '../vos/constantValues'
 
 const orderWithFusas=(side)=>{
     if(side.length>0){
         let head = side[0]
         return ( 
             [...[
-            <Line p0={center} p1={head.p0} key={`central:${head.p0.s}`}/>,
+            <Line p0={letterCenter} p1={head.p0} key={`central:${head.p0.s}`}/>,
             <Curve {...head} key={`curve:${head.p0.s}`}/>,
             <Line {...head} key={`shallow:${head.p0.s}`}/>
             ],...orderWithFusas(side.slice(1))]
@@ -22,7 +26,7 @@ const orderWithSemiQuaver=(side)=>{
         let second = side[1]
         return ( 
             [...[
-            <Line p0={center} p1={head.p0} key={`central:${head.p0.s}`}/>,
+            <Line p0={letterCenter} p1={head.p0} key={`central:${head.p0.s}`}/>,
             <Curve {...head} key={`curve:${head.p0.s}`}/>,
             {},
             <Line p0={head.p0} p1={second.p1} key={`shallow:${head.p0.s}`}/>,
@@ -34,7 +38,7 @@ const orderWithSemiQuaver=(side)=>{
         let head = side[0]
         return ( 
             [
-            <Line p0={center} p1={head.p0} key={`central:${head.p0.s}`}/>,
+            <Line p0={letterCenter} p1={head.p0} key={`central:${head.p0.s}`}/>,
             <Curve {...head} key={`curve:${head.p0.s}`}/>,
             {}]
         )
@@ -42,20 +46,21 @@ const orderWithSemiQuaver=(side)=>{
     else return []
 }
 
-const selectOnlyShowables=(tempo,lines)=>{
+const selectOnlyShowables=(binaryValue,lines)=>{ 
     if(lines.length>0){
-        if (tempo%2!==0){
-            return [lines[0],...selectOnlyShowables(tempo>>1,lines.slice(1))]
+        if (binaryValue%2!==0){
+            return [lines[0],...selectOnlyShowables(binaryValue>>1,lines.slice(1))]
         }
-        else return selectOnlyShowables(tempo>>1,lines.slice(1))
+        else return selectOnlyShowables(binaryValue>>1,lines.slice(1))
     }
     else 
         return []
 }
-
-const selectOrder=(tempo, side)=>{
-    //2340 when position 2,5,8,11 is 1 (there are fusas)
-    if((tempo & 2340) !==0) return orderWithFusas(side) 
+const areFusasPositions=(binaryValue)=>{
+    return (binaryValue & 9586980) !== 0
+}
+const selectOrder=(binaryValue, side)=>{
+    if(areFusasPositions(binaryValue)) return orderWithFusas(side) 
     else return orderWithSemiQuaver(side)
 }
 
@@ -88,15 +93,15 @@ const Letter = ({
     return(
         <div style={{display:'inline-block'}}>
             <svg height={l} width={l} >
-                {selectOnlyShowables(notation.snare1,selectOrder(notation.snare1,up))}
-                {selectOnlyShowables(notation.snare2,selectOrder(notation.snare2,right))}
-                {selectOnlyShowables(notation.kick0>>1,selectOrder(notation.kick0,left).slice(1))}
-                {selectOnlyShowables(notation.kick1,selectOrder(notation.kick1,down))}
+                {selectOnlyShowables(
+                    notation.snare,
+                    selectOrder(notation.snare,[...letterUpperSide,...letterRightSide]))}
+                {selectOnlyShowables(
+                    notation.kick,
+                    selectOrder(notation.kick,[...letterLeftSide,...letterDownSide]))}
             </svg>
-            <span style={{display:'block'}} width={l}>{notation.snare1.toString(2).split("").reverse().join("")}</span>
-            <span style={{display:'block'}} width={l}>{notation.snare2.toString(2).split("").reverse().join("")}</span>
-            <span style={{display:'block'}} width={l}>{notation.kick0.toString(2).split("").reverse().join("")}</span>
-            <span style={{display:'block'}} width={l}>{notation.kick1.toString(2).split("").reverse().join("")}</span>
+            <span style={{display:'block'}} width={l}>{notation.snare.toString(2).split("").reverse().join("")}</span>
+            <span style={{display:'block'}} width={l}>{notation.kick.toString(2).split("").reverse().join("")}</span>
         </div>
     )
 }

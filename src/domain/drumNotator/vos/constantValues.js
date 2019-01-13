@@ -10,9 +10,9 @@ export const points = [...Array(dy).keys()].slice(1).map(i=>
         }
         }))
 
-export const center = points[(dx/2)-1][(dy/2)-1]
+export const letterCenter = points[(dx/2)-1][(dy/2)-1]
 
-export const up = glue(points[0])
+export const letterUpperSide = glue(points[0])
     .map(p=>{        
         return {
             p0:p.p0,
@@ -20,7 +20,7 @@ export const up = glue(points[0])
             c:`${p.p0.x+l/dx/2} ${p.p0.y-2*l/dy}`}
         }) 
 
-export const right = glue(points.map(row=>row[dx-2]))
+export const letterRightSide = glue(points.map(row=>row[dx-2]))
     .map(p=>{
         return {
             p0:p.p0,
@@ -28,14 +28,14 @@ export const right = glue(points.map(row=>row[dx-2]))
             c:`${p.p0.x+2*l/dx} ${p.p0.y+l/dy/2}`}
         })
 
-export const left = glue(points.map(row=>row[0]))
+export const letterLeftSide = glue(points.map(row=>row[0]))
     .map(p=>{
         return {
             p0:p.p0,
             p1:p.p1,
             c:`${p.p0.x-2*l/dx} ${p.p0.y+l/dy/2}`}
         })
-export const down = glue([...points[dy-2],points[dy-3][dx-2]])
+export const letterDownSide = glue([...points[dy-2],points[dy-3][dx-2]])
     .map(p=>{
         return {
             p0:p.p0,
