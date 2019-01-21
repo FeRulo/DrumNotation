@@ -1,14 +1,15 @@
+
 const player = (state={
         played: false,
         continued:false,
-        index: 0,
+        index: 1,
         bpm:60
     }, action={type:'NONE'}) => {
     switch (action.type) {
         case 'SET_PLAYED':
             return {played: !state.played, 
                     continued: true,
-                    index: 0,
+                    index: 1,
                     bpm:state.bpm}
         case 'PAUSE':
             return {continued: false, 
@@ -17,7 +18,7 @@ const player = (state={
                     bpm:state.bpm}
         case 'CONTINUE':
             return {continued: true, 
-                    index: state.played? state.index + 1 : 0,
+                    index: state.played? action.index:1,
                     played: state.played,
                     bpm:state.bpm}
         case 'INCREASE_BPM':

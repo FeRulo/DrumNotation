@@ -38,7 +38,9 @@ class DrumNotator extends Component{
             simpleDrumNotationBuilder={simpleDrumNotationBuilder}
             keyMap={keyMap}/>
           <KeyShower keyMap={keyMap} />
-          <DrumPlayer store={this.props.store} player={player} notation={simpleDrumNotationBuilder.notation}/>
+          <DrumPlayer store={this.props.store} 
+            player={player} 
+            notation={simpleDrumNotationBuilder.notation}/>
         </div>
       );
   }
