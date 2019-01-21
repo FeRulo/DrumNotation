@@ -6,18 +6,29 @@ import {letterCenter,
     letterDownSide,l} from '../vos/constantValues'
 
 const orderWithFusas=(side)=>{
-    if(side.length>0){
+    if(side.length>1){
         let head = side[0]
+        let second = side[1]
         return ( 
             [...[
             <Line p0={letterCenter} p1={head.p0} key={`central:${head.p0.s}`}/>,
+            <Line {...head} key={`shallow:${head.p0.s}`}/>,
             <Curve {...head} key={`curve:${head.p0.s}`}/>,
-            <Line {...head} key={`shallow:${head.p0.s}`}/>
-            ],...orderWithFusas(side.slice(1))]
+            <Line p0={letterCenter} p1={second.p0} key={`central:${second.p0.s}`}/>,
+            <Curve {...second} key={`curve:${second.p0.s}`}/>,
+            <Line {...second} key={`shallow:${second.p0.s}`}/>
+            ],...orderWithFusas(side.slice(2))]
+        )
+    }else if(side.length>0){
+        let head = side[0]
+        return ( 
+            [
+            <Line p0={letterCenter} p1={head.p0} key={`central:${head.p0.s}`}/>,
+            <Line {...head} key={`shallow:${head.p0.s}`}/>,
+            {}]
         )
     }
-    else 
-        return []
+    else return []
 }
 
 const orderWithSemiQuaver=(side)=>{
@@ -27,8 +38,8 @@ const orderWithSemiQuaver=(side)=>{
         return ( 
             [...[
             <Line p0={letterCenter} p1={head.p0} key={`central:${head.p0.s}`}/>,
-            <Curve {...head} key={`curve:${head.p0.s}`}/>,
             {},
+            <Curve {...head} key={`curve:${head.p0.s}`}/>,
             <Line p0={head.p0} p1={second.p1} key={`shallow:${head.p0.s}`}/>,
             <Curve {...second} key={`curve:${second.p0.s}`}/>,
             {}
@@ -57,7 +68,7 @@ const selectOnlyShowables=(binaryValue,lines)=>{
         return []
 }
 const areFusasPositions=(binaryValue)=>{
-    return (binaryValue & 9586980) !== 0
+    return (binaryValue & ((1<<1) | (1<<5) | (1<<7) | (1<<11)))
 }
 const selectOrder=(binaryValue, side)=>{
     if(areFusasPositions(binaryValue)) return orderWithFusas(side) 

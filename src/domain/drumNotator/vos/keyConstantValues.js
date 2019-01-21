@@ -14,7 +14,7 @@ const orderKeyCombinationsWithPoints= (row, center, keySpecials, bits)=>{
     else return []
 }
 const bits = [...Array(25).keys()].map(k=>Math.pow(2,k))
-const keySpecials = [['z'],['c'],[],['x'],['v']]
+const keySpecials = [['z'],['x'],[],['c'],['v']]
 const keyPoints = [['7','8','9'],['4','5','6'],['1','2','3']]
 
 export const snareKeyCombination = orderKeyCombinationsWithPoints(
