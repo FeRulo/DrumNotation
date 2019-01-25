@@ -21,23 +21,20 @@ const getTimeBetween = (player,next,bpm)=> {
         (next.indexHit===1? 0:interval(player.index)) +
         next.indexLetter - player.indexLetter)
 }
-function getKickLetter(indexLetter, indexHit,notation){
+function getKickIndexes(indexLetter,indexHit,notation){
     return (indexHit >= (1<<12) && indexLetter < notation.length - 1)? 
-        (indexLetter + 1):
-         indexLetter
+        {indexHit: indexHit>>12,indexLetter:(indexLetter + 1)}:
+         {indexHit: (indexHit<<12),indexLetter:indexLetter}
 }
-function getKickHit(indexHit){
-    return (indexHit >= (1<<12))? indexHit>>12: indexHit<<12
-}
+
 const getNextIndexes =(
         indexHit,
         indexLetter,
         notation)=>{
-    let kickLetter = getKickLetter(indexLetter,indexHit,notation)
-    let kickHit = getKickHit(indexHit)
+    let kickIndexes = getKickIndexes(indexLetter,indexHit,notation)
     if(indexLetter >= notation.length) return {indexHit:indexHit,indexLetter:indexLetter}
     else if(bitsAreMatching(notation[indexLetter].snare, indexHit) ||
-        bitsAreMatching(notation[kickLetter].kick, kickHit)){
+        bitsAreMatching(notation[kickIndexes.indexLetter].kick,kickIndexes.indexHit)){
         return {indexHit:indexHit,indexLetter:indexLetter}
     }
     else{
@@ -55,9 +52,8 @@ function bitsAreMatching(drum, index){
     return res
 }
 function playKick(notation,indexLetter, indexHit){
-    let kickLetter = getKickLetter(indexLetter,indexHit,notation)
-    let kickHit = getKickHit(indexHit)
-    if(bitsAreMatching(notation[kickLetter].kick,kickHit)) {
+    let kickIndexes = getKickIndexes(indexLetter,indexHit,notation)
+    if(bitsAreMatching(notation[kickIndexes.indexLetter].kick,kickIndexes.indexHit)) {
         return hit(audioKick)
     }
 }
@@ -77,9 +73,7 @@ function play(player,store,notation){
         let intervalTime = getTimeBetween(player, nextIndexes, player.bpm)
         console.log('time waiting '+ intervalTime*player.bpm/60000)
         pause(store)
-        return setTimeout(()=>follow(
-            store,nextIndexes), 
-        intervalTime)
+        return setTimeout(()=>follow(store,nextIndexes), intervalTime)
     }
     
 }
@@ -116,7 +110,7 @@ class DrumPlayer extends Component{
         start(this.props.player,this.props.store,this.props.notation)
     }
     render(){
-        return(<p>{this.props.player.index} bpm {this.props.player.bpm}</p>)
+        return(<p>{Math.log2(this.props.player.index)} bpm {this.props.player.bpm}</p>)
     }
 
 }
