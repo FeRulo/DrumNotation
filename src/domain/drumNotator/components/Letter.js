@@ -68,7 +68,11 @@ const selectOnlyShowables=(binaryValue,lines)=>{
         return []
 }
 const areFusasPositions=(binaryValue)=>{
-    return (binaryValue & ((1<<1) | (1<<5) | (1<<7) | (1<<11)))
+    return (binaryValue & 
+        ((1<<1) | (1<<5) |
+        (1<<7) | (1<<11) |
+        (1<<13) | (1<<17) |
+        (1<<19) | (1<<23)))
 }
 const selectOrder=(binaryValue, side)=>{
     if(areFusasPositions(binaryValue)) return orderWithFusas(side) 

@@ -15,11 +15,10 @@ console.log(intervals)
 const interval = (i)=> intervals[Math.log2(i)]
 
 const getTimeBetween = (player,next,bpm)=> {  
-    console.log(`${interval(next.indexHit)}-${interval(player.index) }+${next.indexLetter - player.indexLetter}`)  
+    console.log(`nextHit:${interval(next.indexHit)} - hit: ${interval(player.index)} + betweenLetters: ${next.indexLetter - player.indexLetter}`)  
     return (60000/bpm)*(
-        interval(next.indexHit)-
-        (next.indexHit===1? 0:interval(player.index)) +
-        next.indexLetter - player.indexLetter)
+        Math.abs(interval(next.indexHit)-interval(player.index) +
+        next.indexLetter - player.indexLetter))
 }
 function getKickIndexes(indexLetter,indexHit,notation){
     return (indexHit >= (1<<12) && indexLetter < notation.length - 1)? 
@@ -38,7 +37,7 @@ const getNextIndexes =(
         return {indexHit:indexHit,indexLetter:indexLetter}
     }
     else{
-        if(indexHit >= (1<<24)) return getNextIndexes(1, indexLetter + 1, notation)
+        if(indexHit >= (1<<23)) return getNextIndexes(1, indexLetter + 1, notation)
         else return getNextIndexes(indexHit<<1, indexLetter, notation)
     }
 }
@@ -65,8 +64,10 @@ function playSnare(notation,indexLetter, indexHit){
 function play(player,store,notation){
     if(player.indexLetter >= notation.length) stop(store)    
     else{
-        console.log(`***hit: ${player.index.toString(2)} letter: ${player.indexLetter} 
+        console.log(`***hit: ${Math.log2(player.index)} letter: ${player.indexLetter} 
             notation: ${notation[player.indexLetter].snare}`)
+        let kickIndexes = getKickIndexes(player.indexLetter,player.index,notation)
+        console.log(`kick: ${notation[kickIndexes.indexLetter].kick} i: ${kickIndexes.indexHit}`)
         playKick(notation,player.indexLetter,player.index)
         playSnare(notation,player.indexLetter,player.index)
         let nextIndexes = getNextIndexes(player.index<<1, player.indexLetter, notation)
