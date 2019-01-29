@@ -49,22 +49,21 @@ const getNextIndexes =(
         indexHit,
         indexLetter,
         notation)=>{
-    const snareHit = indexHit<<1
-    let kickIndexes = getKickIndexes(indexLetter,snareHit,notation)
-    if(indexLetter >= notation.length) return {indexHit:snareHit,indexLetter:indexLetter}
-    else if(bitsAreMatching(notation[indexLetter].snare, snareHit) ||
+    let kickIndexes = getKickIndexes(indexLetter,indexHit,notation)
+    if(indexLetter >= notation.length) return {indexHit:indexHit,indexLetter:indexLetter}
+    else if(bitsAreMatching(notation[indexLetter].snare, indexHit) ||
         bitsAreMatching(notation[kickIndexes.indexLetter].kick,kickIndexes.indexHit)){
-        console.log(`returning- Hit: ${Math.log2(snareHit)} letter: ${indexLetter}`)
-        return {indexHit:snareHit,indexLetter:indexLetter}
+        console.log(`returning- Hit: ${Math.log2(indexHit)} letter: ${indexLetter}`)
+        return {indexHit:indexHit,indexLetter:indexLetter}
     }
     else{
-        if(isFinalHit(snareHit)) {
+        if(isFinalHit(indexHit)) {
             console.log("final Hit")
             return getNextIndexes(1, indexLetter + 1, notation)
         }
         else {
-            console.log(`increasing ${Math.log2(snareHit)}`)
-            return getNextIndexes(snareHit, indexLetter, notation)}
+            console.log(`increasing ${Math.log2(indexHit)}`)
+            return getNextIndexes(indexHit<<1, indexLetter, notation)}
     }
 }
 
@@ -96,7 +95,7 @@ function play(player,store,notation){
         console.log(`kick: ${notation[kickIndexes.indexLetter].kick} i: ${kickIndexes.indexHit}`)
         playKick(notation,player.indexLetter,player.index)
         playSnare(notation,player.indexLetter,player.index)
-        let nextIndexes = getNextIndexes(player.index, player.indexLetter, notation)
+        let nextIndexes = getNextIndexes(player.index<<1, player.indexLetter, notation)
         let intervalTime = getTimeBetween(player, nextIndexes, player.bpm)
         console.log('time waiting '+ intervalTime*player.bpm/60000)
         pause(store)
