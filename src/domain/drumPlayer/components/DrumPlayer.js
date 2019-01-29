@@ -10,12 +10,9 @@ const intervals = [...fractions(6),...fractions(8)]
     .sort((a,b)=>{return a-b})
     .filter((x,i,array)=>{return i===array.indexOf(x)})//no repeated elements
 
-console.log(intervals)
-
 const interval = (i)=> intervals[Math.log2(i)]
 
 const getTimeBetween = (player,next,bpm)=> {  
-    console.log(`-nextHit:${interval(next.indexHit)} + hit: ${interval(player.index)}, betweenLetters: ${next.indexLetter - player.indexLetter}`)  
     return (60000/bpm)*(
         Math.abs(interval(next.indexHit)-interval(player.index) +
         2*(next.indexLetter - player.indexLetter)) 
