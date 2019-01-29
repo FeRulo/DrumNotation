@@ -15,30 +15,56 @@ console.log(intervals)
 const interval = (i)=> intervals[Math.log2(i)]
 
 const getTimeBetween = (player,next,bpm)=> {  
-    console.log(`nextHit:${interval(next.indexHit)} - hit: ${interval(player.index)} + betweenLetters: ${next.indexLetter - player.indexLetter}`)  
+    console.log(`-nextHit:${interval(next.indexHit)} + hit: ${interval(player.index)}, betweenLetters: ${next.indexLetter - player.indexLetter}`)  
     return (60000/bpm)*(
         Math.abs(interval(next.indexHit)-interval(player.index) +
-        next.indexLetter - player.indexLetter))
+        2*(next.indexLetter - player.indexLetter)) 
+        )
 }
-function getKickIndexes(indexLetter,indexHit,notation){
-    return (indexHit >= (1<<12) && indexLetter < notation.length - 1)? 
-        {indexHit: indexHit>>12,indexLetter:(indexLetter + 1)}:
-         {indexHit: (indexHit<<12),indexLetter:indexLetter}
+function isBeginning(snareIndex){
+    return snareIndex <= (1<<12) 
 }
 
+function isFinished(indexLetter,notation){
+    return (indexLetter < notation.length - 1)
+}
+
+function advanceTheHalf(indexHit){
+    return indexHit << 12
+}
+
+function delayTheHalf(indexHit){
+    return indexHit>>12
+}
+
+function getKickIndexes(indexLetter,indexHit,notation){
+    return (isBeginning(indexHit) || !isFinished(indexLetter,notation))? 
+        {indexHit: advanceTheHalf(indexHit),indexLetter:indexLetter}:
+        {indexHit: delayTheHalf(indexHit),indexLetter:(indexLetter + 1)}
+}
+function isFinalHit(indexHit){
+    return indexHit >= (1<<23)
+}
 const getNextIndexes =(
         indexHit,
         indexLetter,
         notation)=>{
-    let kickIndexes = getKickIndexes(indexLetter,indexHit,notation)
-    if(indexLetter >= notation.length) return {indexHit:indexHit,indexLetter:indexLetter}
-    else if(bitsAreMatching(notation[indexLetter].snare, indexHit) ||
+    const snareHit = indexHit<<1
+    let kickIndexes = getKickIndexes(indexLetter,snareHit,notation)
+    if(indexLetter >= notation.length) return {indexHit:snareHit,indexLetter:indexLetter}
+    else if(bitsAreMatching(notation[indexLetter].snare, snareHit) ||
         bitsAreMatching(notation[kickIndexes.indexLetter].kick,kickIndexes.indexHit)){
-        return {indexHit:indexHit,indexLetter:indexLetter}
+        console.log(`returning- Hit: ${Math.log2(snareHit)} letter: ${indexLetter}`)
+        return {indexHit:snareHit,indexLetter:indexLetter}
     }
     else{
-        if(indexHit >= (1<<23)) return getNextIndexes(1, indexLetter + 1, notation)
-        else return getNextIndexes(indexHit<<1, indexLetter, notation)
+        if(isFinalHit(snareHit)) {
+            console.log("final Hit")
+            return getNextIndexes(1, indexLetter + 1, notation)
+        }
+        else {
+            console.log(`increasing ${Math.log2(snareHit)}`)
+            return getNextIndexes(snareHit, indexLetter, notation)}
     }
 }
 
@@ -64,13 +90,13 @@ function playSnare(notation,indexLetter, indexHit){
 function play(player,store,notation){
     if(player.indexLetter >= notation.length) stop(store)    
     else{
-        console.log(`***hit: ${Math.log2(player.index)} letter: ${player.indexLetter} 
+        console.log(`\n***hit: ${Math.log2(player.index)} letter: ${player.indexLetter} 
             notation: ${notation[player.indexLetter].snare}`)
         let kickIndexes = getKickIndexes(player.indexLetter,player.index,notation)
         console.log(`kick: ${notation[kickIndexes.indexLetter].kick} i: ${kickIndexes.indexHit}`)
         playKick(notation,player.indexLetter,player.index)
         playSnare(notation,player.indexLetter,player.index)
-        let nextIndexes = getNextIndexes(player.index<<1, player.indexLetter, notation)
+        let nextIndexes = getNextIndexes(player.index, player.indexLetter, notation)
         let intervalTime = getTimeBetween(player, nextIndexes, player.bpm)
         console.log('time waiting '+ intervalTime*player.bpm/60000)
         pause(store)
