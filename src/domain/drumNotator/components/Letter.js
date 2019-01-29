@@ -115,8 +115,6 @@ const Letter = ({
                     notation.kick,
                     selectOrder(notation.kick,[...letterLeftSide,...letterDownSide]))}
             </svg>
-            <span style={{display:'block'}} width={l}>{notation.snare.toString(2).split("").reverse().join("")}</span>
-            <span style={{display:'block'}} width={l}>{notation.kick.toString(2).split("").reverse().join("")}</span>
         </div>
     )
 }

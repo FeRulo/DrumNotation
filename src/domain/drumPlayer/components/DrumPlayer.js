@@ -39,9 +39,11 @@ function getKickIndexes(indexLetter,indexHit,notation){
         {indexHit: advanceTheHalf(indexHit),indexLetter:indexLetter}:
         {indexHit: delayTheHalf(indexHit),indexLetter:(indexLetter + 1)}
 }
+
 function isFinalHit(indexHit){
     return indexHit >= (1<<23)
 }
+
 const getNextIndexes =(
         snareHit,
         indexLetter,
@@ -71,6 +73,7 @@ function bitsAreMatching(drum, index){
     let res = drum & index
     return res
 }
+
 function playKick(notation,indexLetter, indexHit){
     let kickIndexes = getKickIndexes(indexLetter,indexHit,notation)
     if(bitsAreMatching(notation[kickIndexes.indexLetter].kick,kickIndexes.indexHit)) {
@@ -85,7 +88,6 @@ function playSnare(notation,indexLetter, indexHit){
 function play(player,store,notation){
     if(player.indexLetter >= notation.length) stop(store)    
     else{
-        let kickIndexes = getKickIndexes(player.indexLetter,player.index,notation)
         playKick(notation,player.indexLetter,player.index)
         playSnare(notation,player.indexLetter,player.index)
         let nextIndexes = getNextIndexes(player.index, player.indexLetter, notation)
