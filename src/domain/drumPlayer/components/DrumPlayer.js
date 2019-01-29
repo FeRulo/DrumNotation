@@ -46,24 +46,23 @@ function isFinalHit(indexHit){
     return indexHit >= (1<<23)
 }
 const getNextIndexes =(
-        indexHit,
+        snareHit,
         indexLetter,
         notation)=>{
+    let indexHit = snareHit === 0? 1: snareHit << 1 
     let kickIndexes = getKickIndexes(indexLetter,indexHit,notation)
-    if(indexLetter >= notation.length) return {indexHit:indexHit,indexLetter:indexLetter}
+    if (isFinalHit(snareHit)) return getNextIndexes(0, indexLetter + 1, notation)
+    else if(indexLetter >= notation.length) return {indexHit:indexHit,indexLetter:indexLetter}
     else if(bitsAreMatching(notation[indexLetter].snare, indexHit) ||
         bitsAreMatching(notation[kickIndexes.indexLetter].kick,kickIndexes.indexHit)){
-        console.log(`returning- Hit: ${Math.log2(indexHit)} letter: ${indexLetter}`)
         return {indexHit:indexHit,indexLetter:indexLetter}
     }
     else{
         if(isFinalHit(indexHit)) {
-            console.log("final Hit")
-            return getNextIndexes(1, indexLetter + 1, notation)
+            return getNextIndexes(0, indexLetter + 1, notation)
         }
         else {
-            console.log(`increasing ${Math.log2(indexHit)}`)
-            return getNextIndexes(indexHit<<1, indexLetter, notation)}
+            return getNextIndexes(indexHit, indexLetter, notation)}
     }
 }
 
@@ -89,15 +88,11 @@ function playSnare(notation,indexLetter, indexHit){
 function play(player,store,notation){
     if(player.indexLetter >= notation.length) stop(store)    
     else{
-        console.log(`\n***hit: ${Math.log2(player.index)} letter: ${player.indexLetter} 
-            notation: ${notation[player.indexLetter].snare}`)
         let kickIndexes = getKickIndexes(player.indexLetter,player.index,notation)
-        console.log(`kick: ${notation[kickIndexes.indexLetter].kick} i: ${kickIndexes.indexHit}`)
         playKick(notation,player.indexLetter,player.index)
         playSnare(notation,player.indexLetter,player.index)
-        let nextIndexes = getNextIndexes(player.index<<1, player.indexLetter, notation)
+        let nextIndexes = getNextIndexes(player.index, player.indexLetter, notation)
         let intervalTime = getTimeBetween(player, nextIndexes, player.bpm)
-        console.log('time waiting '+ intervalTime*player.bpm/60000)
         pause(store)
         return setTimeout(()=>follow(store,nextIndexes), intervalTime)
     }
