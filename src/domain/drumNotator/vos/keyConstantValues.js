@@ -28,4 +28,5 @@ export const kickKeyCombination = orderKeyCombinationsWithPoints(
     keyPoints[1][1],
     keySpecials.reverse(),
     bits.reverse())
+console.log(kickKeyCombination)
     

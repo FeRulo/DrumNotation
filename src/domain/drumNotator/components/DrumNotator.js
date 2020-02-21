@@ -41,6 +41,7 @@ class DrumNotator extends Component{
           <DrumPlayer store={this.props.store} 
             player={player} 
             notation={simpleDrumNotationBuilder.notation}/>
+        <input type='txt'/>
         </div>
       );
   }
